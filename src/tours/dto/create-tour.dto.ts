@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsIn, IsNotEmpty } from 'class-validator';
 import { TourDifficulty } from '../tour-difficulty.enum';
 
 export class CreateTourDto {
@@ -7,12 +7,13 @@ export class CreateTourDto {
   @IsNotEmpty()
   description: string;
   @IsNotEmpty()
+  @IsIn([TourDifficulty.EASY, TourDifficulty.MEDIUM, TourDifficulty.HARD])
   difficulty: TourDifficulty;
   @IsNotEmpty()
   price: number;
-  duration: number;
-  maxGroupSize: number;
-  summary: string;
+  duration?: number;
+  maxGroupSize?: number;
+  summary?: string;
   // imageCover: string;
   // images: string[];
   // startDates: Date[];

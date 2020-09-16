@@ -1,7 +1,12 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { TourDifficulty } from './tour-difficulty.enum';
 
 @Entity()
 export class TourEntity extends BaseEntity {
+  // ?? Maybe generate using uuid, eg @PrimaryGeneratedColumn("uuid") OR
+  // ?? @Column()
+  // ?? @Generated("uuid")
+  // ?? uuid: string;
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -11,19 +16,20 @@ export class TourEntity extends BaseEntity {
   @Column()
   description: string;
 
+  // @Column({ type: "enum", enum: UserRole, default: UserRole.GHOST }) //   role: UserRole
   @Column()
-  difficulty: string;
+  difficulty: TourDifficulty;
 
   @Column()
   price: number;
 
-  @Column()
+  @Column({ nullable: true })
   duration: number;
 
-  @Column()
+  @Column({ nullable: true })
   maxGroupSize: number;
 
-  @Column()
+  @Column({ nullable: true })
   summary: string;
 
   // @Column()
