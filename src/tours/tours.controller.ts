@@ -17,6 +17,7 @@ import { UpdateTourDto } from './dto/update-tour.dto';
 import { GetToursFilterDto } from './dto/get-tours.filter.dto';
 import { TourEntity } from './tour.entity';
 import { ToursService } from './tours.service';
+import { TourDifficulty } from './tour-difficulty.enum';
 
 @Controller('tours')
 export class ToursController {
@@ -26,13 +27,32 @@ export class ToursController {
 
   @Get()
   getTours(
-    @Query(ValidationPipe) filterDto: GetToursFilterDto,
+    @Query(new ValidationPipe()) filterDto: GetToursFilterDto,
   ): Promise<TourEntity[]> {
+    filterDto.difficulty =
+      TourDifficulty[filterDto.difficulty.toLocaleUpperCase()];
+
     this.logger.verbose(
       `Retrieving all tasks. $Filters: ${JSON.stringify(filterDto)}`,
     );
+
     return this.toursService.getTours(filterDto);
   }
+
+  // @Get()
+  // getTours(
+  //   @Query('difficulty', TourDifficultyValidationPipe)
+  //   tourDifficulty: TourDifficulty,
+  //   @Query('search') search: string, // : Promise<TourEntity[]> {
+  // ): Promise<TourEntity[]> {
+  //   const filterDto = new GetToursFilterDto();
+  //   if (search) filterDto.search = search;
+  //   if (tourDifficulty) filterDto.difficulty = tourDifficulty;
+  //   this.logger.verbose(
+  //     `Retrieving all tasks. $Filters: ${JSON.stringify(filterDto)}`,
+  //   );
+  //   return this.toursService.getTours(filterDto);
+  // }
 
   @Get('/:id')
   getTourById(@Param('id', ParseIntPipe) id: number): Promise<TourEntity> {

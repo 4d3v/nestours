@@ -4,16 +4,23 @@ import { TourDifficulty } from '../tour-difficulty.enum';
 export class CreateTourDto {
   @IsNotEmpty()
   name: string;
+
   @IsNotEmpty()
   description: string;
-  @IsNotEmpty()
+
   @IsIn([TourDifficulty.EASY, TourDifficulty.MEDIUM, TourDifficulty.HARD])
+  @IsNotEmpty()
   difficulty: TourDifficulty;
+
   @IsNotEmpty()
   price: number;
+
   duration?: number;
+
   maxGroupSize?: number;
+
   summary?: string;
+
   // imageCover: string;
   // images: string[];
   // startDates: Date[];

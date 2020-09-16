@@ -36,6 +36,7 @@ export class ToursService {
   }
 
   async deleteTour(id: number): Promise<void> {
-    this.tourRepository.delete(id);
+    const tour = await this.getTourById(id);
+    this.tourRepository.delete(tour.id);
   }
 }

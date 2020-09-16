@@ -1,4 +1,5 @@
-import { IsIn, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsIn, IsNotEmpty, IsOptional, Validate } from 'class-validator';
+import { CustomDifficultyValidator } from '../custom-difficulty-validation';
 import { TourDifficulty } from '../tour-difficulty.enum';
 
 export class GetToursFilterDto {
@@ -7,7 +8,7 @@ export class GetToursFilterDto {
   search: string;
 
   @IsOptional()
-  @IsIn([TourDifficulty.EASY, TourDifficulty.MEDIUM, TourDifficulty.HARD])
+  @Validate(CustomDifficultyValidator)
   difficulty: TourDifficulty;
 
   // TODO -> apply for other properties such as price: number;

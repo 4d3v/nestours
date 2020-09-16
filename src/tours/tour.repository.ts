@@ -73,17 +73,8 @@ export default class TourRepository extends Repository<TourEntity> {
     updateTourDto: UpdateTourDto,
   ): Promise<TourEntity> {
     for (const x in updateTourDto) {
-      if (updateTourDto[x]) {
+      if (updateTourDto[x] && !isNaN(+updateTourDto[x])) {
         tour[x] = updateTourDto[x];
-
-        // TODO Do a sanity check in case user enters a non number for fields
-        // ** That requires it. Eg price: ???d91dias
-        // ** In case that occurs do not enter this if statement
-        // console.log(x, ' ', typeof (updateTourDto[x] * 1));
-        // console.log(x, ' ', typeof Number(updateTourDto[x]));
-        // console.log(tour[x]);
-        // console.log(updateTourDto[x]);
-        // console.log(+tour[x]);
       }
     }
 
