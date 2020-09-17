@@ -1,4 +1,4 @@
-import { IsIn, IsNotEmpty, IsOptional, Validate } from 'class-validator';
+import { IsNotEmpty, IsOptional, Validate } from 'class-validator';
 import { CustomDifficultyValidator } from '../custom-difficulty-validation';
 import { TourDifficulty } from '../tour-difficulty.enum';
 
