@@ -42,7 +42,7 @@ export class SignUpUserDto {
   @IsNotEmpty()
   @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)/, {
     message:
-      'Password too weak, must have at least 1 uppercase character, 1 lowercase character and 1 expecial character',
+      'PasswordConfirm too weak, must have at least 1 uppercase character, 1 lowercase character and 1 expecial character',
   })
   passwordConfirm: string; // TODO: make validator to check if password === password confirm
 }

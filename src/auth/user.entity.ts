@@ -5,10 +5,11 @@ import {
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 import { UserRole } from './user-role.enum';
 
 @Entity()
-@Unique(['email'])
+@Unique(['name', 'email'])
 export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -28,11 +29,15 @@ export class UserEntity extends BaseEntity {
   @Column()
   password: string;
 
-  @Column()
-  passwordConfirm: string;
+  @Column({ nullable: true })
+  passwordConfirm: string | null;
 
   // passwordChangedAt: Date;
   // passwordResetToken: string;
   // passwordResetExpires: Date;
   // active: boolean;
+
+  async validatePassword(password: string): Promise<boolean> {
+    return await bcrypt.compare(password, this.password);
+  }
 }
