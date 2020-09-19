@@ -49,6 +49,7 @@ export class TourEntity extends BaseEntity {
   @Column()
   userId: number;
 
+  // !! Those commented fields will be implemented later
   // @Column()
   // imageCover: string;
   // @Column()

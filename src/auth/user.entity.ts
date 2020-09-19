@@ -42,6 +42,7 @@ export class UserEntity extends BaseEntity {
   )
   tours: TourEntity[];
 
+  // !! Those commented fields will be implemented later
   // passwordChangedAt: Date;
   // passwordResetToken: string;
   // passwordResetExpires: Date;
