@@ -29,10 +29,11 @@ export class UserEntity extends BaseEntity {
   @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
   role: UserRole;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
-  @Column({ nullable: true })
+  // @Column({ nullable: true })
+  @Column({ select: false })
   passwordConfirm: string | null;
 
   @OneToMany(

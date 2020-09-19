@@ -88,5 +88,6 @@ export class ToursController {
   @UseGuards(AuthGuard())
   test(@GetUser() user: UserEntity) {
     console.log(user);
+    return user;
   }
 }
