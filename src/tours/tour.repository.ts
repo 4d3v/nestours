@@ -1,4 +1,9 @@
-import { InternalServerErrorException, Logger } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  Logger,
+  NotAcceptableException,
+} from '@nestjs/common';
+import { UserEntity } from 'src/auth/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateTourDto } from './dto/create-tour.dto';
 import { GetToursFilterDto } from './dto/get-tours.filter.dto';
@@ -34,25 +39,12 @@ export default class TourRepository extends Repository<TourEntity> {
     }
   }
 
-  async createTour(createTourDto: CreateTourDto) {
-    const {
-      name,
-      description,
-      difficulty,
-      price,
-      duration,
-      maxGroupSize,
-      summary,
-    } = createTourDto;
-
+  async createTour(createTourDto: CreateTourDto, user: UserEntity) {
     const tour = new TourEntity();
-    tour.name = name;
-    tour.description = description;
-    tour.difficulty = difficulty;
-    tour.price = price;
-    tour.duration = duration;
-    tour.maxGroupSize = maxGroupSize;
-    tour.summary = summary;
+    tour.user = user;
+
+    for (const x in createTourDto)
+      if (createTourDto[x]) tour[x] = createTourDto[x];
 
     try {
       await tour.save();
@@ -63,8 +55,10 @@ export default class TourRepository extends Repository<TourEntity> {
         )}`,
         err.stack,
       );
+      throw new InternalServerErrorException();
     }
 
+    delete tour.user;
     return tour;
   }
 
@@ -73,7 +67,14 @@ export default class TourRepository extends Repository<TourEntity> {
     updateTourDto: UpdateTourDto,
   ): Promise<TourEntity> {
     for (const x in updateTourDto) {
-      if (updateTourDto[x] && !isNaN(+updateTourDto[x])) {
+      if (updateTourDto[x]) {
+        if (
+          (x === 'price' || x === 'duration' || x === 'maxGroupSize') &&
+          isNaN(+updateTourDto[x])
+        ) {
+          continue;
+        }
+
         tour[x] = updateTourDto[x];
       }
     }
@@ -87,6 +88,7 @@ export default class TourRepository extends Repository<TourEntity> {
         )}`,
         err.stack,
       );
+      throw new InternalServerErrorException();
     }
 
     return tour;

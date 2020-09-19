@@ -1,4 +1,5 @@
-import { IsIn, IsNotEmpty } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsIn, IsInt, IsNotEmpty } from 'class-validator';
 import { TourDifficulty } from '../tour-difficulty.enum';
 
 export class CreateTourDto {
@@ -13,10 +14,16 @@ export class CreateTourDto {
   difficulty: TourDifficulty;
 
   @IsNotEmpty()
+  @Type(() => Number)
+  @IsInt()
   price: number;
 
+  @Type(() => Number)
+  @IsInt()
   duration?: number;
 
+  @Type(() => Number)
+  @IsInt()
   maxGroupSize?: number;
 
   summary?: string;

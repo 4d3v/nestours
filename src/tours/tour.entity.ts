@@ -1,5 +1,12 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { TourDifficulty } from './tour-difficulty.enum';
+import { UserEntity } from 'src/auth/user.entity';
 
 @Entity()
 export class TourEntity extends BaseEntity {
@@ -31,6 +38,16 @@ export class TourEntity extends BaseEntity {
 
   @Column({ nullable: true })
   summary: string;
+
+  @ManyToOne(
+    () => UserEntity,
+    user => user.tours,
+    { eager: false },
+  )
+  user: UserEntity;
+
+  @Column()
+  userId: number;
 
   // @Column()
   // imageCover: string;
