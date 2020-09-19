@@ -1,8 +1,4 @@
-import {
-  InternalServerErrorException,
-  Logger,
-  NotAcceptableException,
-} from '@nestjs/common';
+import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { UserEntity } from 'src/auth/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateTourDto } from './dto/create-tour.dto';

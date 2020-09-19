@@ -33,6 +33,8 @@ export class CreateTourDto {
   // startDates: Date[];
 }
 
+// !! Got this mongoose schema from Jonas Schmedtmann's github repo
+// !! Using this just as reference for the DB
 // {
 //     "startLocation": {
 //       "description": "Miami, USA",

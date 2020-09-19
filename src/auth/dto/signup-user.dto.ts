@@ -7,6 +7,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { IsEqualTo } from '../custom-password-isequal-validation';
 import { UserRole } from '../user-role.enum';
 
 export class SignUpUserDto {
@@ -40,10 +41,6 @@ export class SignUpUserDto {
   @MinLength(6)
   @MaxLength(20)
   @IsNotEmpty()
-  @Matches(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)/, {
-    message:
-      'PasswordConfirm too weak, must have at least 1 uppercase character, 1 lowercase character and 1 expecial character',
-  })
+  @IsEqualTo('password') // !! 2: this is another way of adding custom validation with class-validator
   passwordConfirm: string;
-  // TODO: make validator to check if password === password confirm
 }
