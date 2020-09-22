@@ -111,7 +111,10 @@ export class UserRepository extends Repository<UserEntity> {
     email,
     password,
   }: AuthCredentialsDto): Promise<{ name: string; role: UserRole }> {
-    const user = await this.findOne({ email });
+    const user = await this.findOne({
+      email,
+    });
+
     if (user && (await user.validatePassword(password)))
       return { name: user.name, role: user.role };
     else return undefined;

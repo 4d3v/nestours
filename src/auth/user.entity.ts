@@ -11,7 +11,7 @@ import { UserRole } from './user-role.enum';
 import { TourEntity } from 'src/tours/tour.entity';
 
 @Entity()
-@Unique(['email'])
+@Unique(['name', 'email'])
 export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -25,15 +25,16 @@ export class UserEntity extends BaseEntity {
   @Column({ default: 'default.jpg' })
   photo: string;
 
-  // TODO: Make so that the user cannot specify role on creation
   @Column({ type: 'enum', enum: UserRole, default: UserRole.USER })
   role: UserRole;
 
-  @Column({ select: false })
+  // @Column({ select: false })
+  @Column()
   password: string;
 
   // @Column({ nullable: true })
-  @Column({ select: false })
+  // @Column({ select: false })
+  @Column()
   passwordConfirm: string | null;
 
   @OneToMany(

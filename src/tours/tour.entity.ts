@@ -23,7 +23,24 @@ export class TourEntity extends BaseEntity {
   @Column()
   description: string;
 
-  // @Column({ type: "enum", enum: UserRole, default: UserRole.GHOST }) //   role: UserRole
+  @Column('timestamp', {
+    default: () => 'CURRENT_TIMESTAMP',
+    select: false,
+    nullable: false,
+  })
+  createdAt: Date;
+
+  @Column('date', { array: true })
+  startDates: Date[];
+
+  // TODO: Implement geojson for start location
+
+  @Column({ default: 'default-img-cover.jpg' })
+  imageCover: string;
+
+  @Column('text', { nullable: true, array: true })
+  images: string[];
+
   @Column()
   difficulty: TourDifficulty;
 
@@ -39,6 +56,10 @@ export class TourEntity extends BaseEntity {
   @Column({ nullable: true })
   summary: string;
 
+  // !! Actually locations could be another entity
+  // @Column({ array: true })
+  // locations: Record<string, unknown>[];
+
   @ManyToOne(
     () => UserEntity,
     user => user.tours,
@@ -48,12 +69,4 @@ export class TourEntity extends BaseEntity {
 
   @Column()
   userId: number;
-
-  // !! Those commented fields will be implemented later
-  // @Column()
-  // imageCover: string;
-  // @Column()
-  // images: string[];
-  // @Column()
-  // startDates: Date[];
 }

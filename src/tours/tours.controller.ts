@@ -61,6 +61,8 @@ export class ToursController {
       throw new UnauthorizedException(
         'You do not have permission to perform this action',
       );
+    console.log(typeof createTaskDto.startDates[0]);
+
     return this.toursService.createTour(createTaskDto, user);
   }
 

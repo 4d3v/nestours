@@ -1,5 +1,11 @@
 import { Type } from 'class-transformer';
-import { IsIn, IsInt, IsNotEmpty } from 'class-validator';
+import {
+  IsDateString,
+  IsIn,
+  IsInt,
+  IsISO8601,
+  IsNotEmpty,
+} from 'class-validator';
 import { TourDifficulty } from '../tour-difficulty.enum';
 
 export class CreateTourDto {
@@ -18,6 +24,16 @@ export class CreateTourDto {
   @IsInt()
   price: number;
 
+  @IsNotEmpty({ message: 'Must provide at least one starting date' })
+  // @IsDateString()
+  // @IsISO8601()
+  // !! PS: none of the two validators are working ... TODO: check how to apply it properly
+  startDates: Date[];
+
+  imageCover?: string;
+
+  images?: string[];
+
   @Type(() => Number)
   @IsInt()
   duration?: number;
@@ -27,10 +43,6 @@ export class CreateTourDto {
   maxGroupSize?: number;
 
   summary?: string;
-
-  // imageCover: string;
-  // images: string[];
-  // startDates: Date[];
 }
 
 // !! Got this mongoose schema from Jonas Schmedtmann's github repo
