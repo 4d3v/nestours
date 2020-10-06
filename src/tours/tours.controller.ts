@@ -57,7 +57,7 @@ export class ToursController {
     @Body() createTaskDto: CreateTourDto,
     @GetUser() user: UserEntity,
   ): Promise<TourEntity> {
-    if (user.role === UserRole.USER || user.role === UserRole.LEAD_GUIDE)
+    if (user.role === UserRole.USER || user.role === UserRole.GUIDE)
       throw new UnauthorizedException(
         'You do not have permission to perform this action',
       );
@@ -74,7 +74,7 @@ export class ToursController {
     @Body() updateTourDto: UpdateTourDto,
     @GetUser() user: UserEntity,
   ): Promise<TourEntity> {
-    if (user.role === UserRole.USER || user.role === UserRole.LEAD_GUIDE)
+    if (user.role === UserRole.USER || user.role === UserRole.GUIDE)
       throw new UnauthorizedException(
         'You do not have permission to perform this action',
       );

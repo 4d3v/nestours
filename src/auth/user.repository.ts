@@ -14,23 +14,29 @@ import { CreateUserDto } from './dto/create-user.dto';
 
 @EntityRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
+  // TODO send email on user creation
   private logger = new Logger('UserRepository');
 
-  async createUser(createUserDto: CreateUserDto): Promise<{ message: string }> {
-    // !!TODO this method is very similar to signUp so it could be refactored
-    const user = new UserEntity();
-
+  factoryUser(
+    user: UserEntity,
+    typeUserDto: CreateUserDto,
+    excludedFields: Array<string>,
+  ): void {
     // !! This will delete unwanted fields coming from the @Body()
     // !!TODO check wether class-validator has a built in method to remove those unwanted fields
-    const excludedFields: [string] = ['photo'];
     for (let i = 0; i < excludedFields.length; ++i)
-      if (createUserDto[excludedFields[i]])
-        delete createUserDto[excludedFields[i]];
+      if (typeUserDto[excludedFields[i]]) delete typeUserDto[excludedFields[i]];
 
     // !! After removal of unwanted fields ... Looping through all the expected ones
-    // !! and assigning to user: UserEntity the data that came from the @Body()
-    for (const x in createUserDto)
-      if (createUserDto[x]) user[x] = createUserDto[x];
+    // !! and assigning to user (UserEntity) the data that came from the @Body()
+    for (const x in typeUserDto) if (typeUserDto[x]) user[x] = typeUserDto[x];
+  }
+
+  async createUser(createUserDto: CreateUserDto): Promise<{ message: string }> {
+    const user = new UserEntity();
+    const excludedFields: [string] = ['photo'];
+
+    this.factoryUser(user, createUserDto, excludedFields);
 
     // Check if admin provided password for user, otherwise generate a random one
     if (!user.password) user.password = this.genRngPassword();
@@ -66,18 +72,9 @@ export class UserRepository extends Repository<UserEntity> {
     role: UserRole;
   }> {
     const user = new UserEntity();
-
-    // !! This will delete unwanted fields coming from the @Body()
-    // !!TODO check wether class-validator has a built in method to remove those unwanted fields
     const excludedFields: [string, string] = ['role', 'photo'];
-    for (let i = 0; i < excludedFields.length; ++i)
-      if (signUpUserDto[excludedFields[i]])
-        delete signUpUserDto[excludedFields[i]];
 
-    // !! After removal of unwanted fields ... Looping through all the expected ones
-    // !! and assigning to user: UserEntity the data that came from the @Body()
-    for (const x in signUpUserDto)
-      if (signUpUserDto[x]) user[x] = signUpUserDto[x];
+    this.factoryUser(user, signUpUserDto, excludedFields);
 
     const salt = await bcrypt.genSalt();
     user.password = await this.hashPassword(user.password, salt);
@@ -111,13 +108,10 @@ export class UserRepository extends Repository<UserEntity> {
     email,
     password,
   }: AuthCredentialsDto): Promise<{ name: string; role: UserRole }> {
-    const user = await this.findOne({
-      email,
-    });
-
+    const user = await this.findOne({ email });
     if (user && (await user.validatePassword(password)))
       return { name: user.name, role: user.role };
-    else return undefined;
+    return undefined;
   }
 
   async hashPassword(password: string, salt: string): Promise<string> {

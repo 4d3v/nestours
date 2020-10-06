@@ -1,7 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Logger,
+  Param,
+  ParseIntPipe,
   Post,
   UnauthorizedException,
   UseGuards,
@@ -34,6 +37,20 @@ export class AuthController {
         'You do not have permission to perform this action',
       );
     return this.authService.createUser(createUserDto);
+  }
+
+  // !! This endpoint is intended to be used only by admins to create users such as guide, lead-guide
+  @Delete('deleteuser/:id')
+  @UseGuards(AuthGuard())
+  deleteUser(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: UserEntity,
+  ) {
+    if (user.role !== UserRole.ADMIN)
+      throw new UnauthorizedException(
+        'You do not have permission to perform this action',
+      );
+    return this.authService.deleteUser(id);
   }
 
   @Post('/signup')
