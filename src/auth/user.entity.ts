@@ -48,7 +48,9 @@ export class UserEntity extends BaseEntity {
   // passwordChangedAt: Date;
   // passwordResetToken: string;
   // passwordResetExpires: Date;
-  // active: boolean;
+
+  @Column({ default: true })
+  active: boolean;
 
   async validatePassword(password: string): Promise<boolean> {
     return await bcrypt.compare(password, this.password);

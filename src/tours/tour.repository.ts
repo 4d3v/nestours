@@ -1,4 +1,8 @@
-import { InternalServerErrorException, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { UserEntity } from 'src/auth/user.entity';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateTourDto } from './dto/create-tour.dto';
@@ -41,6 +45,19 @@ export default class TourRepository extends Repository<TourEntity> {
 
     for (const x in createTourDto)
       if (createTourDto[x]) tour[x] = createTourDto[x];
+
+    for (let i = 0; i < createTourDto.locations.length; ++i) {
+      for (let j = 0; j < 2; ++j)
+        if (
+          isNaN(+createTourDto.locations[i].day) ||
+          isNaN(+createTourDto.locations[i].coordinates[j])
+        )
+          throw new BadRequestException(
+            'Date and coordinates must be of type number',
+          );
+
+      tour.locations[i]['id'] = i; // !! Using index id but may change it later if necessary
+    }
 
     try {
       await tour.save();

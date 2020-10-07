@@ -39,7 +39,7 @@ export class AuthController {
     return this.authService.createUser(createUserDto);
   }
 
-  // !! This endpoint is intended to be used only by admins to create users such as guide, lead-guide
+  // !! This endpoint is intended to be used only by admins to delete users
   @Delete('deleteuser/:id')
   @UseGuards(AuthGuard())
   deleteUser(

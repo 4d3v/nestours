@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { TourDifficulty } from './tour-difficulty.enum';
 import { UserEntity } from 'src/auth/user.entity';
+import { ILocations } from './locations.interface';
 
 @Entity()
 export class TourEntity extends BaseEntity {
@@ -31,7 +32,7 @@ export class TourEntity extends BaseEntity {
   createdAt: Date;
 
   @Column('date', { array: true })
-  startDates: Date[];
+  startDates: Array<Date>;
 
   // TODO: Implement geojson for start location
 
@@ -39,7 +40,7 @@ export class TourEntity extends BaseEntity {
   imageCover: string;
 
   @Column('text', { nullable: true, array: true })
-  images: string[];
+  images: Array<string>;
 
   @Column()
   difficulty: TourDifficulty;
@@ -56,9 +57,8 @@ export class TourEntity extends BaseEntity {
   @Column({ nullable: true })
   summary: string;
 
-  // !! Actually locations could be another entity
-  // @Column({ array: true })
-  // locations: Record<string, unknown>[];
+  @Column('simple-json', { nullable: true })
+  locations: Array<ILocations>;
 
   @ManyToOne(
     () => UserEntity,

@@ -6,6 +6,7 @@ import {
   IsISO8601,
   IsNotEmpty,
 } from 'class-validator';
+import { ILocations } from '../locations.interface';
 import { TourDifficulty } from '../tour-difficulty.enum';
 
 export class CreateTourDto {
@@ -43,6 +44,9 @@ export class CreateTourDto {
   maxGroupSize?: number;
 
   summary?: string;
+
+  @IsNotEmpty({ message: 'Must provide at least one starting location' })
+  locations: Array<ILocations>;
 }
 
 // !! Got this mongoose schema from Jonas Schmedtmann's github repo
