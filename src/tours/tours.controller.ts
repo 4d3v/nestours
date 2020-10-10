@@ -9,6 +9,7 @@ import {
   Patch,
   Post,
   Query,
+  Res,
   UnauthorizedException,
   UseGuards,
   UsePipes,
@@ -24,12 +25,17 @@ import { GetUser } from 'src/auth/get-user.decorator';
 import { UserEntity } from 'src/auth/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { UserRole } from 'src/auth/user-role.enum';
+import { CreateReviewDto } from 'src/reviews/dto/create-review.dto';
+import { ReviewsService } from 'src/reviews/reviews.service';
 
 @Controller('tours')
 export class ToursController {
   private logger = new Logger('ToursController');
 
-  constructor(private toursService: ToursService) {}
+  constructor(
+    private toursService: ToursService,
+    private reviewsService: ReviewsService,
+  ) {}
 
   @Get()
   getTours(
@@ -91,5 +97,17 @@ export class ToursController {
   test(@GetUser() user: UserEntity) {
     console.log(user);
     return user;
+  }
+
+  @Post('/:id/reviews')
+  @UseGuards(AuthGuard())
+  async createReview(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() createReviewDto: CreateReviewDto,
+    @GetUser()
+    user: UserEntity,
+  ) {
+    const tour = await this.getTourById(id);
+    return this.reviewsService.createReview(tour.id, createReviewDto, user);
   }
 }

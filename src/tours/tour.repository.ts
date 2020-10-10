@@ -71,7 +71,10 @@ export default class TourRepository extends Repository<TourEntity> {
       throw new InternalServerErrorException();
     }
 
-    delete tour.user;
+    delete tour.user.role;
+    delete tour.user.password;
+    delete tour.user.passwordConfirm;
+    delete tour.user.active;
     return tour;
   }
 

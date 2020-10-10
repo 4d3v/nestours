@@ -3,11 +3,13 @@ import {
   Column,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { TourDifficulty } from './tour-difficulty.enum';
 import { UserEntity } from 'src/auth/user.entity';
 import { ILocations } from './locations.interface';
+import { ReviewsEntity } from 'src/reviews/reviews.entity';
 
 @Entity()
 export class TourEntity extends BaseEntity {
@@ -59,6 +61,12 @@ export class TourEntity extends BaseEntity {
 
   @Column('simple-json', { nullable: true })
   locations: Array<ILocations>;
+
+  @OneToMany(
+    () => ReviewsEntity,
+    reviews => reviews.tour,
+  )
+  reviews: Array<ReviewsEntity>;
 
   @ManyToOne(
     () => UserEntity,

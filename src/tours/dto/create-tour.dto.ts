@@ -1,11 +1,5 @@
 import { Type } from 'class-transformer';
-import {
-  IsDateString,
-  IsIn,
-  IsInt,
-  IsISO8601,
-  IsNotEmpty,
-} from 'class-validator';
+import { IsDateString, IsIn, IsInt, IsNotEmpty } from 'class-validator';
 import { ILocations } from '../locations.interface';
 import { TourDifficulty } from '../tour-difficulty.enum';
 
@@ -26,14 +20,8 @@ export class CreateTourDto {
   price: number;
 
   @IsNotEmpty({ message: 'Must provide at least one starting date' })
-  // @IsDateString()
-  // @IsISO8601()
-  // !! PS: none of the two validators are working ... TODO: check how to apply it properly
-  startDates: Date[];
-
-  imageCover?: string;
-
-  images?: string[];
+  @IsDateString({ each: true })
+  startDates: Array<Date>;
 
   @Type(() => Number)
   @IsInt()
@@ -43,6 +31,8 @@ export class CreateTourDto {
   @IsInt()
   maxGroupSize?: number;
 
+  imageCover?: string;
+  images?: Array<string>;
   summary?: string;
 
   @IsNotEmpty({ message: 'Must provide at least one starting location' })
@@ -62,7 +52,7 @@ export class CreateTourDto {
 //     "ratingsQuantity": 6,
 //     "images": ["tour-2-1.jpg", "tour-2-2.jpg", "tour-2-3.jpg"],
 //     "startDates": [
-//       "2021-06-19T09:00:00.000Z",
+//       "2021-06-19t09:00:00.000z",
 //       "2021-07-20T09:00:00.000Z",
 //       "2021-08-18T09:00:00.000Z"
 //     ],
